@@ -58,6 +58,7 @@ router.post('/seed', async (req, res) => {
       { name: 'Education', type: 'expense', icon: '📚', color: '#45aaf2' },
       { name: 'Rent', type: 'expense', icon: '🏠', color: '#cd853f' },
       { name: 'Groceries', type: 'expense', icon: '🥦', color: '#26de81' },
+      { name: 'Family', type: 'expense', icon: '👨‍👩‍👧', color: '#fdcb6e' },
       { name: 'Other', type: 'expense', icon: '📦', color: '#a4b0be' },
     ];
 
