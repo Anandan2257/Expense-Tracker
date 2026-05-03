@@ -591,6 +591,17 @@ body {
   color: var(--text-primary);
 }
 
+.year-label {
+  cursor: pointer;
+  padding: 4px 12px;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.year-label:active {
+  background: var(--accent-glow);
+}
+
 .month-picker-year button {
   background: var(--bg-elevated);
   border: 1px solid var(--border);
