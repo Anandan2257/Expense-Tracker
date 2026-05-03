@@ -326,16 +326,18 @@ body {
   padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px));
   z-index: 100;
   max-width: 600px;
-  left: 50%;
-  transform: translateX(-50%);
+  margin-left: auto;
+  margin-right: auto;
   /* Liquid Glass */
-  background: rgba(8, 8, 8, 0.85);
+  background: rgba(8, 8, 8, 0.92);
   -webkit-backdrop-filter: blur(40px) saturate(180%) brightness(1.1);
   backdrop-filter: blur(40px) saturate(180%) brightness(1.1);
   border-top: 1px solid rgba(212, 175, 55, 0.12);
   box-shadow:
     0 -4px 30px rgba(0, 0, 0, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  /* iOS fix */
+  -webkit-transform: translateZ(0);
 }
 
 .nav-item {
@@ -1848,9 +1850,8 @@ body {
   .delete-btn { padding: 14px; }
 }
 
-/* iOS rubber-band scroll fix */
+/* iOS height fix */
 @supports (-webkit-touch-callout: none) {
-  .page { min-height: -webkit-fill-available; }
   body { min-height: -webkit-fill-available; }
 }
 
