@@ -84,9 +84,18 @@ const Transactions = () => {
             <p>No transactions found</p>
           </div>
         ) : (
-          Object.entries(grouped).map(([date, txs]) => (
+          Object.entries(grouped).map(([date, txs]) => {
+            const dayIncome = txs.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
+            const dayExpense = txs.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
+            return (
             <div key={date}>
-              <div className="date-group-header">{date}</div>
+              <div className="date-group-header">
+                <span>{date}</span>
+                <span className="date-group-totals">
+                  {dayIncome > 0 && <span className="income">+{formatCurrency(dayIncome)}</span>}
+                  {dayExpense > 0 && <span className="expense">-{formatCurrency(dayExpense)}</span>}
+                </span>
+              </div>
               {txs.map((tx) => (
                 <SwipeableItem
                   key={tx._id}
@@ -115,7 +124,8 @@ const Transactions = () => {
                 </SwipeableItem>
               ))}
             </div>
-          ))
+            );
+          })
         )}
       </div>
     </div>
