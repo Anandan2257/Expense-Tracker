@@ -323,12 +323,13 @@ body {
   justify-content: space-around;
   align-items: center;
   padding: 4px 8px;
-  padding-bottom: calc(6px + env(safe-area-inset-bottom));
+  padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px));
   z-index: 100;
   max-width: 600px;
-  margin: 0 auto;
+  left: 50%;
+  transform: translateX(-50%);
   /* Liquid Glass */
-  background: rgba(8, 8, 8, 0.55);
+  background: rgba(8, 8, 8, 0.85);
   -webkit-backdrop-filter: blur(40px) saturate(180%) brightness(1.1);
   backdrop-filter: blur(40px) saturate(180%) brightness(1.1);
   border-top: 1px solid rgba(212, 175, 55, 0.12);
@@ -1858,6 +1859,7 @@ body {
   .header { padding-top: calc(24px + env(safe-area-inset-top)); }
   .bottom-nav { padding-bottom: calc(6px + env(safe-area-inset-bottom)); }
   .page { padding-bottom: calc(120px + env(safe-area-inset-bottom)); }
+  .fab-button { bottom: calc(80px + env(safe-area-inset-bottom)); }
 }
 
 /* ===== PULL TO REFRESH ===== */
