@@ -424,7 +424,7 @@ body {
 .page {
   max-width: 600px;
   margin: 0 auto;
-  padding-bottom: calc(90px + env(safe-area-inset-bottom));
+  padding-bottom: calc(120px + env(safe-area-inset-bottom));
   min-height: 100vh;
   min-height: 100dvh;
   animation: fadeIn 0.3s ease both;
@@ -1857,7 +1857,7 @@ body {
 @supports (padding-top: env(safe-area-inset-top)) {
   .header { padding-top: calc(24px + env(safe-area-inset-top)); }
   .bottom-nav { padding-bottom: calc(6px + env(safe-area-inset-bottom)); }
-  .page { padding-bottom: calc(90px + env(safe-area-inset-bottom)); }
+  .page { padding-bottom: calc(120px + env(safe-area-inset-bottom)); }
 }
 
 /* ===== PULL TO REFRESH ===== */
