@@ -4,6 +4,8 @@ import { formatCurrency } from '../utils/helpers';
 import MonthSelector from '../components/MonthSelector';
 import SwipeableItem from '../components/SwipeableItem';
 import ConfirmDialog from '../components/ConfirmDialog';
+import PullToRefresh from '../components/PullToRefresh';
+import LoadingScreen from '../components/LoadingScreen';
 
 const Budget = () => {
   const now = new Date();
@@ -16,6 +18,7 @@ const Budget = () => {
   const [formCat, setFormCat] = useState('');
   const [formAmount, setFormAmount] = useState('');
   const [confirmDelete, setConfirmDelete] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchData = useCallback(async () => {
     try {
@@ -27,6 +30,8 @@ const Budget = () => {
       setCategories(catRes.data);
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   }, [month, year]);
 
@@ -74,8 +79,11 @@ const Budget = () => {
   const totalBudget = budgets.reduce((s, b) => s + b.amount, 0);
   const totalSpent = budgets.reduce((s, b) => s + b.spent, 0);
 
+  if (loading) return <div className="page"><LoadingScreen /></div>;
+
   return (
     <>
+    <PullToRefresh onRefresh={fetchData}>
     <div className="page">
       <div className="header">
         <h1>Budget</h1>
@@ -149,6 +157,7 @@ const Budget = () => {
         </div>
       )}
     </div>
+    </PullToRefresh>
 
     {showForm && (
       <div className="modal-overlay" onClick={() => { setShowForm(false); setEditBudget(null); }}>

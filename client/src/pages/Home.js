@@ -5,6 +5,8 @@ import MonthSelector from '../components/MonthSelector';
 import TransactionModal from '../components/TransactionModal';
 import SwipeableItem from '../components/SwipeableItem';
 import ConfirmDialog from '../components/ConfirmDialog';
+import PullToRefresh from '../components/PullToRefresh';
+import LoadingScreen from '../components/LoadingScreen';
 
 const Home = () => {
   const now = new Date();
@@ -15,6 +17,7 @@ const Home = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editTx, setEditTx] = useState(null);
   const [confirmDelete, setConfirmDelete] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchData = useCallback(async () => {
     try {
@@ -26,6 +29,8 @@ const Home = () => {
       setRecent(txRes.data.slice(0, 10));
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   }, [month, year]);
 
@@ -41,8 +46,11 @@ const Home = () => {
     }
   };
 
+  if (loading) return <div className="page"><LoadingScreen /></div>;
+
   return (
     <>
+    <PullToRefresh onRefresh={fetchData}>
     <div className="page">
       <div className="header">
         <h1>Expense Tracker</h1>
@@ -107,6 +115,7 @@ const Home = () => {
       </div>
 
     </div>
+    </PullToRefresh>
 
     <button className="fab-button" onClick={() => { setEditTx(null); setModalOpen(true); }}>
       +

@@ -5,6 +5,8 @@ import MonthSelector from '../components/MonthSelector';
 import TransactionModal from '../components/TransactionModal';
 import SwipeableItem from '../components/SwipeableItem';
 import ConfirmDialog from '../components/ConfirmDialog';
+import PullToRefresh from '../components/PullToRefresh';
+import LoadingScreen from '../components/LoadingScreen';
 
 const Transactions = () => {
   const now = new Date();
@@ -15,6 +17,7 @@ const Transactions = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editTx, setEditTx] = useState(null);
   const [confirmDelete, setConfirmDelete] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const handleSwipeDelete = async () => {
     if (confirmDelete) {
@@ -32,6 +35,8 @@ const Transactions = () => {
       setTransactions(res.data);
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   }, [month, year, filter]);
 
@@ -45,8 +50,11 @@ const Transactions = () => {
     return acc;
   }, {});
 
+  if (loading) return <div className="page"><LoadingScreen /></div>;
+
   return (
     <>
+    <PullToRefresh onRefresh={fetchData}>
     <div className="page">
       <div className="header">
         <h1>Transaction History</h1>
@@ -111,6 +119,7 @@ const Transactions = () => {
         )}
       </div>
     </div>
+    </PullToRefresh>
 
     <button className="fab-button" onClick={() => { setEditTx(null); setModalOpen(true); }}>
       +

@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { getAccountStats, getCategories, deleteCategory, seedCategories } from '../utils/api';
 import { formatCurrency } from '../utils/helpers';
 import { useAuth } from '../context/AuthContext';
 import ConfirmDialog from '../components/ConfirmDialog';
+import PullToRefresh from '../components/PullToRefresh';
+import LoadingScreen from '../components/LoadingScreen';
 
 const Account = () => {
   const { user, logout } = useAuth();
@@ -11,20 +13,24 @@ const Account = () => {
   const [showCategories, setShowCategories] = useState(false);
   const [confirmReset, setConfirmReset] = useState(false);
   const [confirmLogout, setConfirmLogout] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchStats();
-    getCategories().then(res => setCategories(res.data)).catch(() => {});
-  }, []);
-
-  const fetchStats = async () => {
+  const fetchData = useCallback(async () => {
     try {
-      const res = await getAccountStats();
-      setStats(res.data);
+      const [statsRes, catRes] = await Promise.all([
+        getAccountStats(),
+        getCategories(),
+      ]);
+      setStats(statsRes.data);
+      setCategories(catRes.data);
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => { fetchData(); }, [fetchData]);
 
   const formatDateShort = (dateStr) => {
     if (!dateStr) return '—';
@@ -49,8 +55,11 @@ const Account = () => {
   const incomeCategories = categories.filter(c => c.type === 'income');
   const expenseCategories = categories.filter(c => c.type === 'expense');
 
+  if (loading) return <div className="page"><LoadingScreen /></div>;
+
   return (
     <>
+    <PullToRefresh onRefresh={fetchData}>
     <div className="page">
       <div className="header">
         <h1>Account</h1>
@@ -210,6 +219,7 @@ const Account = () => {
       </div>
 
     </div>
+    </PullToRefresh>
 
     <ConfirmDialog
       isOpen={confirmReset}

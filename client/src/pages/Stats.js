@@ -14,6 +14,8 @@ import {
 import { getByCategory, getDailyTrend, getSummary } from '../utils/api';
 import { formatCurrency } from '../utils/helpers';
 import MonthSelector from '../components/MonthSelector';
+import PullToRefresh from '../components/PullToRefresh';
+import LoadingScreen from '../components/LoadingScreen';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, Filler);
 
@@ -28,6 +30,7 @@ const Stats = () => {
   const [daily, setDaily] = useState([]);
   const [summary, setSummary] = useState({ income: 0, expense: 0 });
   const [viewType, setViewType] = useState('expense');
+  const [loading, setLoading] = useState(true);
 
   const fetchData = useCallback(async () => {
     try {
@@ -41,6 +44,8 @@ const Stats = () => {
       setSummary(sumRes.data);
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   }, [month, year, viewType]);
 
@@ -94,7 +99,10 @@ const Stats = () => {
     ],
   };
 
+  if (loading) return <div className="page"><LoadingScreen /></div>;
+
   return (
+    <PullToRefresh onRefresh={fetchData}>
     <div className="page">
       <div className="header">
         <h1>Statistics</h1>
@@ -177,6 +185,7 @@ const Stats = () => {
         ))}
       </div>
     </div>
+    </PullToRefresh>
   );
 };
 
